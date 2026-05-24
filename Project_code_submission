@@ -1,0 +1,136 @@
+Linear regression:
+
+library(readxl)
+
+Student_performance <- read_excel(file.choose())
+
+summary(Student_performance)
+
+mean(Student_performance$Exam_Score)
+mean(Student_performance$Previous_Scores)
+
+Model_1 <- lm(Exam_Score ~., data = Student_performance)
+summary(Model_1)
+
+model_summary <- summary(Model_1)
+(model_summary$sigma)^2
+model_summary$r.squared
+AIC(Model_1)
+model_summary$adj.r.squared
+BIC(Model_1)
+
+set.seed(90)
+
+sample <- sample(nrow(Student_performance), nrow(Student_performance) * 0.90)
+Perf_train = Student_performance[sample, ]
+Perf_test = Student_performance[-sample, ]
+
+Model_2 <- lm(Exam_Score ~., data = Perf_train)
+summary(Model_2)
+
+model_summary_2 <- summary(Model_2)
+(model_summary_2$sigma)^2
+model_summary_2$r.squared
+AIC(Model_2)
+model_summary_2$adj.r.squared
+BIC(Model_2)
+
+pi<- predict(object = Model_2, newdata = Perf_train )
+mean((pi - Perf_train$Exam_Score)^2)
+
+
+pi_2 <- predict(object = Model_2, newdata = Perf_test )
+mean((pi_2 - Perf_test$Exam_Score)^2)
+
+model.step <- step(Model_2, direction = "backward")
+
+Optimal_model <- lm(Exam_Score ~ Hours_Studied + Attendance + Parental_involment + 
+                      Access_to_Resources + Extracurricular_Activities + Previous_Scores + 
+                      Motivation_Level + Internet_Access + Tutoring_Sessions + 
+                      Family_Income + Teacher_Quality + Peer_Influence + Physical_Activity + 
+                      Learning_Disabilities + Parental_Education_Level + Distance_from_Home,
+                    data = Perf_train)
+
+
+pi_optimal <- predict(object = Optimal, newdata = Perf_train)
+mean((pi_2 - Perf_test$Exam_Score)^2)
+AIC(Optimal_model)
+BIC(Optimal_model)
+
+pi_optimal<- predict(object = Optimal_model, newdata = Perf_train )
+mean((pi_optimal - Perf_train$Exam_Score)^2)
+
+## cross validation
+library(boot)
+Model_10 <- glm(Exam_Score ~ Hours_Studied + Attendance + Parental_Involvement + 
+                  Access_to_Resources + Extracurricular_Activities + Previous_Scores + 
+                  Motivation_Level + Internet_Access + Tutoring_Sessions + 
+                  Family_Income + Teacher_Quality + Peer_Influence + Physical_Activity + 
+                  Learning_Disabilities + Parental_Education_Level + Distance_from_Home, data =           Student_performance)
+
+cv.glm(data = Student_performance, glmfit = Model_10, K = 10)$delta[2]
+
+Regression tree:
+
+student <- read_excel(file.choose())
+set.seed(90)
+sample_index <- sample(nrow(student),nrow(student)*0.90)
+student_train <- student[sample_index,]
+student_test <- student[-sample_index,]
+summary(student)
+student_rpart <- rpart(formula = Exam_Score ~ ., data = student)
+student_rpart
+prp(student_rpart,digits = 4, extra = 1)
+student_train_pred_tree = predict(student_rpart)
+student_test_pred_tree = predict(student_rpart,student_test)
+MSE.tree <- mean((student_test_pred_tree - student_test$Exam_Score)^2)
+MSE.tree
+student_tree_big1 <- rpart(formula = Exam_Score ~ ., data = student_train, cp = 0.003)
+prp(student_tree_big1)
+student_tree_big2 <- rpart(formula = Exam_Score ~ ., data = student_train, cp = 0.006)
+prp(student_tree_big2)
+student_train_pred_treebig = predict(student_tree_big2)
+student_test_pred_treebig = predict(student_tree_big2,student_test)
+MSE.treebig <- mean((student_test_pred_treebig - student_test$Exam_Score)^2)
+MSE.treebig
+student_reg = lm(Exam_Score~., data = student_train)
+student_test_pred_reg = predict(student_reg, student_test)
+mean((student_test_pred_reg - student_test$Exam_Score)^2)
+student_glm = glm(Exam_Score ~ ., data = student)
+cv.glm(data = student, glmfit = student_glm, K = 10)$delta[2]
+
+
+Random Forest:
+
+##installed library 
+library(readxl)
+install.packages('ggplot2')
+library(ggplot2)
+install.packages('cowplot')
+library(cowplot)
+install.packages('randomForest')
+library(randomForest)
+Student_performance <- read_excel(file.choose())
+str(Student_performance)
+Student_performance$Access_to_Resources <- as.factor(Student_performance$Access_to_Resources)
+Student_performance$Extracurricular_Activities <- as.factor(Student_performance$Extracurricular_Activities)
+Student_performance$Motivation_Level <-as.factor(Student_performance$Motivation_Level)
+Student_performance$Internet_Access <- as.factor(Student_performance$Internet_Access)
+Student_performance$Family_Income<- as.factor(Student_performance$Family_Income)
+Student_performance$Teacher_Quality <-as.factor(Student_performance$Teacher_Quality)
+Student_performance$School_Type <- as.factor(Student_performance$School_Type)
+Student_performance$Peer_Influence <- as.factor(Student_performance$Peer_Influence)
+Student_performance$Learning_Disabilities <- as.factor(Student_performance$Learning_Disabilities)
+Student_performance$Parental_Education_Level<-as.factor(Student_performance$Parental_Education_Level)
+Student_performance$Distance_from_Home <- as.factor(Student_performance$Distance_from_Home)
+Student_performance$Parental_involment <- as.factor(Student_performance$Parental_involment)
+Student_performance$Gender <- as.factor(Student_performance$Gender)
+set.seed(90)
+sample <- sample(nrow(Student_performance), nrow(Student_performance) * 0.90)
+Perf_train = Student_performance[sample, ]
+Perf_test = Student_performance[-sample, ]
+library(randomForest)
+rf_model <- randomForest(Exam_Score ~., data = Perf_train)
+print(rf_model)
+importance(rf_model)
+VarImport(rf_model)
