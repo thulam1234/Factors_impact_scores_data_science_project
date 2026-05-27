@@ -1,30 +1,52 @@
 # Factors_impact_scores_data_science_project
-### Data mining final project 
-### Memebers: Thu Lily Lam, Phuong Anh Nguyen 
-### Tool: R programming 
+#### Data mining final project 
+####  Members: Thu Lily Lam, Phuong Anh Nguyen 
+#### Tool: R programming 
 
-### Objective: To identify factors that impact students’s grades to implement strategies to help improve students success in school which contribute to increase school overall rating 
+### Objective: 
+
+To identify factors that impact students’s grades to implement strategies to help improve students success in school which contribute to increase school overall rating 
 
 ### Data summary:
+
 Hours_studied: amount of time students spend to study 
+
 Attendance: How often a student attend class
+
 Parental involvement: level of which parents involved in their child academic life
+
 Access to resources: How easy and accessible is it to academic resources 
+
 Extracurricular activities: Whether or not students participate in extracurricular that can enhance their academic and involvement in school
+
 Sleep hours: Average number of sleep. Sleep is crucial for brain development.
+
 Previous score: previous exam score
+
 Internet access: Ability to access internet 
+
 Teacher quality : Quality of teachers 
+
 Peer influence: influence of peers on academic performance 
+
 Physical activity : Average number of physical activity per week
+
 MotivationLevel: Student's level of motivation (Low, Medium, High).
+
 Tutoring Sessions: Number of tutoring sessions attended per month.
+
 Family Income: Family income level (Low, Medium, High).
+
 School Type: Type of school attended (Public, Private).
+
 Learning Disabilities: Presence of learning disabilities (Yes, No).
+
 Parental_Education_Level:	Highest education level of parents (High School, College, Postgraduate).
+
 Distance from Home: Distance from home to school (Near, Moderate, Far).
+
 Gender: Gender of the student (Male, Female).
+
 Exam_Score: Final exam score.
 
 ### Data source:https://www.kaggle.com/datasets/lainguyn123/student-performance-factors
